@@ -1,0 +1,53 @@
+---
+version: "3"
+
+env:
+  DOCKER_IMAGE: futuretea/harvester-netboot
+  DOCKER_TAG: latest
+
+tasks:
+  build:
+    desc: "build the docker image"
+    cmds:
+      - docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} .
+
+  push:
+    desc: "push the docker image"
+    cmds:
+      - docker push ${DOCKER_IMAGE}:${DOCKER_TAG}
+
+  pull:
+    desc: "pull the docker image"
+    cmds:
+      - docker pull ${DOCKER_IMAGE}:${DOCKER_TAG}
+
+  build-push:
+    desc: "build and push the docker image"
+    cmds:
+      - task: build
+      - task: push
+
+  up:
+    desc: "start the service"
+    cmds:
+      - docker-compose up -d
+
+  down:
+    desc: "stop the service"
+    cmds:
+      - docker-compose down
+
+  logs:
+    desc: "show the service logs"
+    cmds:
+      - docker-compose logs -f
+
+  update:
+    desc: "update the service"
+    cmds:
+      - git pull
+      - task: build
+      - task: push
+      - task: down
+      - task: up
+      - task: logs

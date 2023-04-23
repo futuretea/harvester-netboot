@@ -1,0 +1,25 @@
+---
+version: "3"
+
+tasks:
+  build:
+    desc: "build the compiled binary"
+    cmds:
+      - mkdir -p ./bin
+      - CGO_ENABLED=0 go build -o ./bin/harvester-netboot
+
+  test:
+    desc: "run all unit tests"
+    cmds:
+      - CGO_ENABLED=0 go test -v ./...
+
+  mod:
+    desc: "clean and update vendor"
+    cmds:
+      - go mod tidy -v
+      - go mod vendor -v
+
+  lint:
+    desc: "lint the code"
+    cmds:
+      - CGO_ENABLED=0 golangci-lint run

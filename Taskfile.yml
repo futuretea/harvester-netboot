@@ -1,0 +1,7 @@
+---
+version: "3"
+
+includes:
+  precommit: .taskfiles/PrecommitTasks.yml
+  go: .taskfiles/GoTasks.yml
+  docker: .taskfiles/DockerTasks.yml

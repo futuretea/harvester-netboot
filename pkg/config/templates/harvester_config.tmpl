@@ -1,0 +1,36 @@
+---
+scheme_version: 1
+{{- if eq .Node.Mode "join" }}
+server_url: https://{{ .Cluster.Vip }}:443
+token: "{{ .OS.Token }}"
+{{- end }}
+os:
+  hostname: "{{ .Node.Hostname }}"
+  password: "{{ .OS.Password }}"
+  ntp_servers:
+    {{- range $server := .OS.NtpServers }}
+    {{ $server }}
+    {{- end }}
+  dns_nameservers:
+    {{- range $server := .OS.DNSNameservers }}
+    {{ $server }}
+    {{- end }}
+install:
+  mode: "{{ .Node.Mode }}"
+  management_interface:
+    interfaces:
+      - name: "{{ .Node.Nic }}"
+    default_route: true
+    method: static
+    ip: "{{ .Node.IP }}"
+    subnet_mask: "{{ .OS.SubnetMask }}"
+    gateway: "{{ .OS.Gateway }}"
+    bond_options:
+      mode: balance-tlb
+      miimon: 100
+  device: "{{ .Node.Device }}"
+  iso_url: "{{ .BaseURL }}/{{ .Cluster.Version }}/harvester-{{ .Cluster.Version }}-amd64.iso"
+  {{- if eq .Node.Mode "create" }}
+  vip: "{{ .Cluster.Vip }}"
+  vip_mode: static
+  {{- end }}

@@ -1,0 +1,18 @@
+---
+version: "3.7"
+services:
+  pixiecore:
+    network_mode: host
+    container_name: pixiecore
+    image: quay.io/pixiecore/pixiecore
+    restart: unless-stopped
+    command:
+      - api
+      - http://127.0.0.1:8080
+  harvester-netboot:
+    container_name: harvester-netboot
+    image: futuretea/harvester-netboot
+    ports:
+      - "8080:8080"
+    volumes:
+      - "./config.yaml:/etc/harvester-netboot/config.yaml"

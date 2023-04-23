@@ -1,0 +1,12 @@
+.dapper
+.idea
+.vscode
+harvester-netboot
+vendor
+bin
+config.yaml
+.terraform.lock.hcl
+.terraform
+terraform.tfstate
+terraform.tfstate.backup
+terraform.tfvars

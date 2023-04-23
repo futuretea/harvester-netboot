@@ -1,0 +1,15 @@
+---
+fail_fast: false
+repos:
+  - repo: https://github.com/adrienverge/yamllint
+    rev: v1.30.0
+    hooks:
+      - id: yamllint
+        args:
+          - --config-file
+          - .yamllint.yaml
+  - repo: https://github.com/gruntwork-io/pre-commit
+    rev: v0.1.21
+    hooks:
+      - id: gofmt
+      - id: golangci-lint
