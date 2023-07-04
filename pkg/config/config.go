@@ -36,6 +36,7 @@ type Node struct {
 	Nic       string            `mapstructure:"nic"`
 	Device    string            `mapstructure:"device"`
 	Mode      string            `mapstructure:"mode"`
+	Raw       bool              `mapstructure:"raw"`
 	ExtraArgs map[string]string `mapstructure:"extra_args"`
 }
 
