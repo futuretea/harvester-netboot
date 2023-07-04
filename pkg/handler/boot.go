@@ -60,9 +60,13 @@ func fmtRootLive(baseURL string, version string) string {
 	return fmt.Sprintf("%s/%s/harvester-%s-rootfs-amd64.squashfs", baseURL, version, version)
 }
 
-func fmtCmdline(baseURL string, version string, configURL string) string {
+func fmtCmdline(baseURL string, version string, configURL string, extraArgs map[string]string) string {
 	rootLive := fmtRootLive(baseURL, version)
-	return fmt.Sprintf("ip=dhcp net.ifnames=1 rd.cos.disable rd.noverifyssl console=tty1 harvester.install.automatic=true root=live:%s harvester.install.config_url=%s", rootLive, configURL)
+	cmdline := fmt.Sprintf("ip=dhcp net.ifnames=1 rd.cos.disable rd.noverifyssl console=tty1 harvester.install.automatic=true root=live:%s harvester.install.config_url=%s", rootLive, configURL)
+	for k, v := range extraArgs {
+		cmdline += fmt.Sprintf(" %s=%s", k, v)
+	}
+	return cmdline
 }
 
 func fmtResp(cluster config.Cluster, node config.Node) (gin.H, error) {
@@ -86,6 +90,6 @@ func fmtResp(cluster config.Cluster, node config.Node) (gin.H, error) {
 	return gin.H{
 		"kernel":  fmtKernel(config.Conf.BaseURL, cluster.Version),
 		"initrd":  []string{fmtInitrd(config.Conf.BaseURL, cluster.Version)},
-		"cmdline": fmtCmdline(config.Conf.BaseURL, cluster.Version, configURL),
+		"cmdline": fmtCmdline(config.Conf.BaseURL, cluster.Version, configURL, node.ExtraArgs),
 	}, nil
 }

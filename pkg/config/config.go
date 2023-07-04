@@ -30,12 +30,13 @@ type OS struct {
 }
 
 type Node struct {
-	Hostname string `mapstructure:"hostname"`
-	IP       string `mapstructure:"ip"`
-	Mac      string `mapstructure:"mac"`
-	Nic      string `mapstructure:"nic"`
-	Device   string `mapstructure:"device"`
-	Mode     string `mapstructure:"mode"`
+	Hostname  string            `mapstructure:"hostname"`
+	IP        string            `mapstructure:"ip"`
+	Mac       string            `mapstructure:"mac"`
+	Nic       string            `mapstructure:"nic"`
+	Device    string            `mapstructure:"device"`
+	Mode      string            `mapstructure:"mode"`
+	ExtraArgs map[string]string `mapstructure:"extra_args"`
 }
 
 type Value struct {
