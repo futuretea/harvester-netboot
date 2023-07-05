@@ -64,14 +64,15 @@ func fmtRawDisk(baseURL string, version string) string {
 	return fmt.Sprintf("%s/%s/harvester-%s-amd64.raw", baseURL, version, version)
 }
 
-func fmtCmdline(baseURL string, version string, configURL string, raw bool, extraArgs map[string]string) string {
+func fmtCmdline(baseURL string, version string, configURL string, node config.Node) string {
 	rootLive := fmtRootLive(baseURL, version)
 	cmdline := fmt.Sprintf("ip=dhcp net.ifnames=1 rd.cos.disable rd.noverifyssl console=tty1 harvester.install.automatic=true root=live:%s harvester.install.config_url=%s", rootLive, configURL)
-	if raw {
+	if node.Raw {
 		rawDisk := fmtRawDisk(baseURL, version)
-		cmdline += fmt.Sprintf(" harvester.install.mode=install harvester.install.power_off=true harvester.install.raw_disk_image_path=%s", rawDisk)
+		device := node.Device
+		cmdline += fmt.Sprintf(" harvester.install.mode=install harvester.install.power_off=true harvester.install.raw_disk_image_path=%s harvester.install.device=%s", rawDisk, device)
 	}
-	for k, v := range extraArgs {
+	for k, v := range node.ExtraArgs {
 		cmdline += fmt.Sprintf(" %s=%s", k, v)
 	}
 	return cmdline
@@ -98,6 +99,6 @@ func fmtResp(cluster config.Cluster, node config.Node) (gin.H, error) {
 	return gin.H{
 		"kernel":  fmtKernel(config.Conf.BaseURL, cluster.Version),
 		"initrd":  []string{fmtInitrd(config.Conf.BaseURL, cluster.Version)},
-		"cmdline": fmtCmdline(config.Conf.BaseURL, cluster.Version, configURL, node.Raw, node.ExtraArgs),
+		"cmdline": fmtCmdline(config.Conf.BaseURL, cluster.Version, configURL, node),
 	}, nil
 }
