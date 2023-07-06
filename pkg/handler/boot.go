@@ -66,7 +66,7 @@ func fmtRawDisk(baseURL string, version string) string {
 
 func fmtCmdline(baseURL string, version string, configURL string, raw bool, extraArgs map[string]string) string {
 	rootLive := fmtRootLive(baseURL, version)
-	cmdline := fmt.Sprintf("ip=dhcp net.ifnames=1 rd.cos.disable rd.noverifyssl console=tty1 harvester.install.automatic=true root=live:%s harvester.install.config_url=%s", rootLive, configURL)
+	cmdline := fmt.Sprintf("ip=dhcp net.ifnames=1 rd.cos.disable rd.noverifyssl console=tty1 harvester.install.tty=tty1 harvester.install.automatic=true root=live:%s harvester.install.config_url=%s", rootLive, configURL)
 	if raw {
 		rawDisk := fmtRawDisk(baseURL, version)
 		cmdline += fmt.Sprintf(" harvester.install.mode=install harvester.install.power_off=true harvester.install.raw_disk_image_path=%s", rawDisk)
